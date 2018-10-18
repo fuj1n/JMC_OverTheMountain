@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41dad27190d716444b50fec68e73b805, type: 3}
+  m_Name: Water
+  m_EditorClassIdentifier: 
+  sprite: {fileID: 21300000, guid: 6af4ef2a33fafb3488f0c6be8a181b81, type: 3}
+  useRotation: 0
+  up: {fileID: 21300000, guid: 30651a766c7edd6438dd030d1ca9b430, type: 3}
+  down: {fileID: 21300000, guid: f542943f0ddd3fe4eba3b0d249767763, type: 3}
+  left: {fileID: 21300000, guid: b1f672d6392afca4f8f04e107d3d833a, type: 3}
+  right: {fileID: 21300000, guid: e12018c258bcd4d4aa5d91fe71d7030f, type: 3}
+  rotationUp: 0
+  rotationDown: 180
+  rotationLeft: 270
+  rotationRight: 90
