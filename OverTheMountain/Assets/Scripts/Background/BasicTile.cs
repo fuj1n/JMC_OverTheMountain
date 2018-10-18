@@ -5,6 +5,7 @@ public class BasicTile : ScriptableObject
 {
     [Header("Basic Tile")]
     public Sprite sprite;
+    public float fps = 60F;
 
     [Header("Modifiers", order = int.MaxValue)]
     public Modifier modifiers;

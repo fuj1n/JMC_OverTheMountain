@@ -1,17 +1,21 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ScrollingBackground : MonoBehaviour
 {
+    public const string TILES_PATH = "BackgroundTiles";
+
     private static readonly HashSet<string> tokens = new HashSet<string>();
     private static readonly Dictionary<string, Sprite[]> sprites = new Dictionary<string, Sprite[]>();
+    private static readonly Dictionary<string, float> frameRates = new Dictionary<string, float>();
     private static readonly Dictionary<string, Sprite[]> spawnables = new Dictionary<string, Sprite[]>();
     private static readonly Dictionary<string, float> rotations = new Dictionary<string, float>();
 
     [RuntimeInitializeOnLoadMethod]
     private static void Initialize()
     {
-        BasicTile[] tiles = Resources.FindObjectsOfTypeAll<BasicTile>();
+        BasicTile[] tiles = Resources.LoadAll<BasicTile>(TILES_PATH);
 
         foreach (BasicTile tile in tiles)
         {
@@ -39,6 +43,7 @@ public class ScrollingBackground : MonoBehaviour
             }
 
             sprites[tile.name] = ChopSprite(tile.sprite);
+            frameRates[tile.name] = tile.fps;
 
             if (tile is ConnectedTile)
             {
@@ -104,6 +109,15 @@ public class ScrollingBackground : MonoBehaviour
                 spawnables[tile.name] = sb.ToArray();
             }
         }
+
+        //for (int i = 0; i < sprites.First().Value.Length; i++)
+        //{
+        //    GameObject g = new GameObject("Test" + i);
+        //    g.AddComponent<SpriteRenderer>().sprite = sprites.First().Value[i];
+        //    g.transform.Translate(Vector3.right * i * 10 + Vector3.forward * 10);
+        //}
+
+        new GameObject("Test").AddComponent<SpriteAnimator>().Sprites = sprites.First().Value;
     }
 
     private static Sprite[] ChopSprite(Sprite s)
