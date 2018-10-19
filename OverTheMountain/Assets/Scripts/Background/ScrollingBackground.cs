@@ -15,6 +15,8 @@ public class ScrollingBackground : MonoBehaviour
     private static readonly Dictionary<string, Sprite[]> spawnables = new Dictionary<string, Sprite[]>();
     private static readonly Dictionary<string, float> rotations = new Dictionary<string, float>();
 
+    private static Sprite white;
+
     public bool enableDebugDraw = false;
 
     public Vector2Int tilesCount = new Vector2Int(4, 6);
@@ -78,6 +80,14 @@ public class ScrollingBackground : MonoBehaviour
                     testtmp.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, 0F, tilesGap.x);
                 }
                 // End test labels
+
+                // Create overlay to show the player where the starting (no generation) zone is
+                GameObject tileStartOverlay = new GameObject("Start Overlay");
+                tileStartOverlay.transform.SetParent(tile.transform, false);
+                SpriteRenderer srSo = tileStartOverlay.AddComponent<SpriteRenderer>();
+                srSo.sprite = white;
+                srSo.color = new Color(1F, 0F, 0F, 0.2F);
+                tileStartOverlay.transform.localPosition += Vector3.back * 2F;
 
                 tile.transform.localPosition = new Vector2(tilesGap.x * x, tilesGap.y * y);
             }
@@ -262,9 +272,16 @@ public class ScrollingBackground : MonoBehaviour
         }
     }
 
+    // Run when the game engine is initializing
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void Initialize()
     {
+        // Generate a purely white 1x1 texture and convert it to a sprite
+        Texture2D rend = new Texture2D(1, 1);
+        rend.SetPixel(0, 0, Color.white);
+        white = Sprite.Create(rend, new Rect(0, 0, 1, 1), Vector2.zero, .1F);
+        white.name = "White";
+
         // Load all the tiles from "Resources/${TILES_PATH}"
         BasicTile[] tiles = Resources.LoadAll<BasicTile>(TILES_PATH);
 
