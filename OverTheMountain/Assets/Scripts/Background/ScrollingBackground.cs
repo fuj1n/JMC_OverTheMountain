@@ -24,6 +24,8 @@ public class ScrollingBackground : MonoBehaviour
 
     [Header("Generation")]
     public int spawnablePasses = 1;
+    [Range(0, 100)]
+    public int tokenSwitchChance = 50;
 
     private Transform[][] tiles;
 
@@ -42,8 +44,8 @@ public class ScrollingBackground : MonoBehaviour
     {
         currentToken = tokens.Contains(STARTING_TOKEN) ? STARTING_TOKEN : RandomToken();
         currentTokens = Enumerable.Repeat(currentToken, tilesCount.x).ToArray();
-        AddQueue();
-        AddQueue();
+        AddQueue(false);
+        AddQueue(false);
 
         anchor = new GameObject("Anchor").transform;
         anchor.SetParent(transform, false);
@@ -233,7 +235,7 @@ public class ScrollingBackground : MonoBehaviour
         return tokens.ElementAt(Random.Range(0, tokens.Count));
     }
 
-    private void AddQueue()
+    private void AddQueue(bool rng = true)
     {
         if (currentTokens == null)
             currentTokens = Enumerable.Repeat(currentToken, tilesCount.x).ToArray();
@@ -241,7 +243,7 @@ public class ScrollingBackground : MonoBehaviour
         if (upcomingTokens.Count > 2)
             return;
 
-        if (Random.Range(0, 100) < 50)
+        if (rng && Random.Range(0, 100) < tokenSwitchChance)
         {
             string oldToken = currentToken;
             currentToken = RandomToken();
