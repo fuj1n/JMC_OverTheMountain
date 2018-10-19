@@ -7,6 +7,8 @@ public class BasicTile : ScriptableObject
     public Sprite sprite;
     public float fps = 60F;
 
+    public Sprite[] spriteVariations;
+
     [Header("Modifiers", order = int.MaxValue)]
     public Modifier modifiers;
 

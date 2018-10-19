@@ -6,7 +6,7 @@ using UnityEngine;
 public class ScrollingBackground : MonoBehaviour
 {
     public const string TILES_PATH = "BackgroundTiles";
-    public const string STARTING_TOKEN = "water";
+    public const string STARTING_TOKEN = "Water";
     public const float HARD_RESET = -2000F;
 
     private static readonly HashSet<string> tokens = new HashSet<string>();
@@ -95,6 +95,12 @@ public class ScrollingBackground : MonoBehaviour
                 tiles[x][tilesCount.y - 1] = newTop;
 
                 ConfigureTile(x, tilesCount.y - 1, currentToken);
+
+                if (Random.Range(0, 100) < 5)
+                {
+                    currentToken = RandomToken();
+                }
+
                 //TODO generate
             }
         }
@@ -129,7 +135,8 @@ public class ScrollingBackground : MonoBehaviour
 
         tokensCache[san] = token;
 
-        san.Sprites = sprites[token];
+        var variations = sprites.Select(s => s.Key).Where(s => s.Equals(token) || s.StartsWith(token + "#"));
+        san.Sprites = sprites[variations.ElementAt(Random.Range(0, variations.Count()))];
         if (frameRates.ContainsKey(token))
             san.fps = frameRates[token];
         if (rotations.ContainsKey(token))
@@ -153,6 +160,7 @@ public class ScrollingBackground : MonoBehaviour
                 float height = sprite.bounds.size.y;
 
                 spawnable.transform.localPosition = new Vector3(Random.Range(0F, tilesGap.x - width), Random.Range(0F, tilesGap.y - height), -3F + Random.value);
+                // Disabled cause it doesn't make sense with the sprites I am using
                 //spawnable.transform.eulerAngles = Vector3.forward * Random.Range(0, 360);
                 spawnable.AddComponent<SpriteRenderer>().sprite = sprite;
             }
@@ -177,16 +185,26 @@ public class ScrollingBackground : MonoBehaviour
                 continue;
             }
 
-            tokens.Add(tile.name);
-
             int spriteWidth = (int)tile.sprite.rect.width;
             int spriteHeight = (int)tile.sprite.rect.height;
 
             if (!ValidateSprite(tile.sprite))
                 continue;
 
+            tokens.Add(tile.name);
+
             sprites[tile.name] = ChopSprite(tile.sprite);
             frameRates[tile.name] = tile.fps;
+
+            if (tile.spriteVariations != null)
+            {
+                for (int i = 0; i < tile.spriteVariations.Length; i++)
+                {
+                    if (!ValidateSprite(tile.spriteVariations[i], errorPrefix: "Sprite Variation"))
+                        continue;
+                    sprites[tile.name + "#" + i] = ChopSprite(tile.spriteVariations[i]);
+                }
+            }
 
             if (tile is ConnectedTile)
             {
@@ -208,13 +226,13 @@ public class ScrollingBackground : MonoBehaviour
                     }
                     else
                     {
-                        if (ValidateSprite(ct.down, "using UP...")) d = ChopSprite(ct.down);
+                        if (ValidateSprite(ct.down, errorSuffix: "using UP...")) d = ChopSprite(ct.down);
                         else d = u;
 
-                        if (ValidateSprite(ct.left, "using UP...")) l = ChopSprite(ct.left);
+                        if (ValidateSprite(ct.left, errorSuffix: "using UP...")) l = ChopSprite(ct.left);
                         else l = u;
 
-                        if (ValidateSprite(ct.right, "using UP...")) r = ChopSprite(ct.right);
+                        if (ValidateSprite(ct.right, errorSuffix: "using UP...")) r = ChopSprite(ct.right);
                         else r = u;
                     }
 
@@ -280,7 +298,7 @@ public class ScrollingBackground : MonoBehaviour
         return sprites;
     }
 
-    private static bool ValidateSprite(Sprite s, string errorSuffix = "skipping...")
+    private static bool ValidateSprite(Sprite s, string errorPrefix = "Sprite", string errorSuffix = "skipping...")
     {
         int spriteWidth = (int)s.rect.width;
         int spriteHeight = (int)s.rect.height;
@@ -293,7 +311,7 @@ public class ScrollingBackground : MonoBehaviour
 
         if (spriteWidth % spriteHeight != 0)
         {
-            Debug.LogWarning("Sprite " + s.name + ": height cannot be evenly divided into width, " + errorSuffix);
+            Debug.LogWarning(errorPrefix + " " + s.name + ": height cannot be evenly divided into width, " + errorSuffix);
             return false;
         }
 

@@ -568,10 +568,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7165218c500149541b650fc23b1a2556, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebugDraw: 0
+  enableDebugDraw: 1
   tilesCount: {x: 4, y: 5}
   tilesGap: {x: 10, y: 10}
   scrollSpeed: 5
+  spawnablePasses: 1
 --- !u!4 &1720701002
 Transform:
   m_ObjectHideFlags: 0
