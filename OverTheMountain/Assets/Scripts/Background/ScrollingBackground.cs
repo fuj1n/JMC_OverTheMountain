@@ -175,6 +175,7 @@ public class ScrollingBackground : MonoBehaviour
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void Initialize()
     {
+        // Load all the tiles from "Resources/${TILES_PATH}"
         BasicTile[] tiles = Resources.LoadAll<BasicTile>(TILES_PATH);
 
         foreach (BasicTile tile in tiles)
@@ -305,7 +306,7 @@ public class ScrollingBackground : MonoBehaviour
 
         if (spriteWidth < spriteHeight)
         {
-            Debug.LogWarning("Sprite " + s.name + " is higher than it is wide, " + errorSuffix);
+            Debug.LogWarning(errorPrefix + s.name + " is higher than it is wide, " + errorSuffix);
             return false;
         }
 
