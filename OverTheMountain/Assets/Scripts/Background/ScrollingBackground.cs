@@ -22,6 +22,9 @@ public class ScrollingBackground : MonoBehaviour
 
     public float scrollSpeed = 5F;
 
+    [Header("Generation")]
+    public int spawnablePasses = 1;
+
     private Transform[][] tiles;
 
     private Dictionary<Transform, SpriteAnimator> animCache = new Dictionary<Transform, SpriteAnimator>();
@@ -136,7 +139,7 @@ public class ScrollingBackground : MonoBehaviour
 
         if (vegetate && spawnables.ContainsKey(token))
         {
-            for (int pass = 0; pass < 3; pass++)
+            for (int pass = 0; pass < spawnablePasses; pass++)
             {
                 if (Random.Range(0, 100) <= 1)
                     continue;
