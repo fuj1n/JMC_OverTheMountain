@@ -51,5 +51,5 @@ MonoBehaviour:
   right: {fileID: 0}
   rotationUp: 0
   rotationDown: 180
-  rotationLeft: 270
-  rotationRight: 90
+  rotationLeft: 90
+  rotationRight: 270

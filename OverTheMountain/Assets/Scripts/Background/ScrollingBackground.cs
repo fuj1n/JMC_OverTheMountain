@@ -33,11 +33,17 @@ public class ScrollingBackground : MonoBehaviour
 
     private float scrollValue = 0F;
 
+    private Queue<string[]> upcomingTokens = new Queue<string[]>();
+
     private string currentToken;
+    private string[] currentTokens;
 
     private void Awake()
     {
         currentToken = tokens.Contains(STARTING_TOKEN) ? STARTING_TOKEN : RandomToken();
+        currentTokens = Enumerable.Repeat(currentToken, tilesCount.x).ToArray();
+        AddQueue();
+        AddQueue();
 
         anchor = new GameObject("Anchor").transform;
         anchor.SetParent(transform, false);
@@ -84,6 +90,15 @@ public class ScrollingBackground : MonoBehaviour
         {
             scrollValue -= tilesGap.y;
 
+            if (upcomingTokens.Count == 0)
+            {
+                AddQueue();
+                AddQueue();
+            }
+
+            currentTokens = upcomingTokens.Dequeue();
+            AddQueue();
+
             for (int x = 0; x < tilesCount.x; x++)
             {
                 Transform newTop = tiles[x][0];
@@ -94,14 +109,7 @@ public class ScrollingBackground : MonoBehaviour
 
                 tiles[x][tilesCount.y - 1] = newTop;
 
-                ConfigureTile(x, tilesCount.y - 1, currentToken);
-
-                if (Random.Range(0, 100) < 5)
-                {
-                    currentToken = RandomToken();
-                }
-
-                //TODO generate
+                ConfigureTile(x, tilesCount.y - 1, currentTokens[x]);
             }
         }
 
@@ -135,15 +143,38 @@ public class ScrollingBackground : MonoBehaviour
 
         tokensCache[san] = token;
 
+        // Select random variation
         var variations = sprites.Select(s => s.Key).Where(s => s.Equals(token) || s.StartsWith(token + "#"));
-        san.Sprites = sprites[variations.ElementAt(Random.Range(0, variations.Count()))];
-        if (frameRates.ContainsKey(token))
-            san.fps = frameRates[token];
-        if (rotations.ContainsKey(token))
-            tile.eulerAngles = Vector3.forward * rotations[token];
+        ConfigureAnimator(san, token, variations.ElementAt(Random.Range(0, variations.Count())));
 
-        //TODO connected textures
+        //san.Sprites = sprites[variations.ElementAt(Random.Range(0, variations.Count()))];
+        //if (frameRates.ContainsKey(token))
+        //    san.fps = frameRates[token];
+        //if (rotations.ContainsKey(token))
+        //    tile.eulerAngles = Vector3.forward * rotations[token];
 
+        // Connected textures
+        // Up
+        if (upcomingTokens.Count > 0 && y == tilesCount.y - 1 && sprites.ContainsKey(token + "$u"))
+            ConnectTextures(token, 'u', tile, upcomingTokens.Peek()[x]);
+
+        // Down
+        if (y > 0 && sprites.ContainsKey(token + "$d"))
+            ConnectTextures(token, 'd', tile, tokensCache[animCache[tiles[x][y - 1]]]);
+
+        // Left
+        if (x == 0)
+            ConnectTextures(token, 'l', tile, "\u00A7");
+        else if (y == tilesCount.y - 1) // Only connects if at the top row
+            ConnectTextures(token, 'l', tile, currentTokens[x - 1]);
+
+        // Right
+        if (x == tilesCount.x - 1)
+            ConnectTextures(token, 'r', tile, "\u00A7");
+        else if (y == tilesCount.y - 1) // Only connects if at the top row
+            ConnectTextures(token, 'r', tile, currentTokens[x + 1]);
+
+        // Vegetation (spawnables)
         if (vegetate && spawnables.ContainsKey(token))
         {
             for (int pass = 0; pass < spawnablePasses; pass++)
@@ -167,9 +198,66 @@ public class ScrollingBackground : MonoBehaviour
         }
     }
 
+    private void ConnectTextures(string token, char direction, Transform tile, string other)
+    {
+        if (other != token)
+        {
+            GameObject connect = new GameObject("ct_" + direction);
+            connect.transform.SetParent(tile, false);
+
+            connect.transform.localPosition += (Vector3.up * tilesGap.y + Vector3.right * tilesGap.x) / 2F + Vector3.back;
+
+            SpriteAnimator sanCt = connect.AddComponent<SpriteAnimator>();
+            ConfigureAnimator(sanCt, token, token + "$" + direction);
+        }
+    }
+
+    private void ConfigureAnimator(SpriteAnimator san, string token, string literalToken)
+    {
+        if (string.IsNullOrWhiteSpace(literalToken))
+            literalToken = token;
+
+        san.Sprites = sprites[literalToken];
+        if (frameRates.ContainsKey(literalToken))
+            san.fps = frameRates[literalToken];
+        else if (frameRates.ContainsKey(token))
+            san.fps = frameRates[token];
+        if (rotations.ContainsKey(literalToken))
+            san.transform.eulerAngles = Vector3.forward * rotations[literalToken];
+        else if (rotations.ContainsKey(token))
+            san.transform.eulerAngles = Vector3.forward * rotations[token];
+    }
+
     private string RandomToken()
     {
         return tokens.ElementAt(Random.Range(0, tokens.Count));
+    }
+
+    private void AddQueue()
+    {
+        if (currentTokens == null)
+            currentTokens = Enumerable.Repeat(currentToken, tilesCount.x).ToArray();
+
+        if (upcomingTokens.Count > 2)
+            return;
+
+        if (Random.Range(0, 100) < 50)
+        {
+            string oldToken = currentToken;
+            currentToken = RandomToken();
+
+            string[] tokens = new string[tilesCount.x];
+            for (int i = 0; i < tokens.Length; i++)
+                tokens[i] = Random.Range(0, 2) == 0 ? oldToken : currentToken;
+
+            upcomingTokens.Enqueue(tokens);
+
+            upcomingTokens.Enqueue(Enumerable.Repeat(currentToken, tilesCount.x).ToArray());
+        }
+        else
+        {
+            upcomingTokens.Enqueue(Enumerable.Repeat(currentToken, tilesCount.x).ToArray());
+        }
     }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -214,7 +302,7 @@ public class ScrollingBackground : MonoBehaviour
                 Sprite[] u, d, l, r;
                 if (ValidateSprite(ct.up))
                 {
-                    u = ChopSprite(ct.up);
+                    u = ChopSprite(ct.up, 0.5F);
 
                     if (ct.useRotation)
                     {
@@ -227,13 +315,13 @@ public class ScrollingBackground : MonoBehaviour
                     }
                     else
                     {
-                        if (ValidateSprite(ct.down, errorSuffix: "using UP...")) d = ChopSprite(ct.down);
+                        if (ValidateSprite(ct.down, errorSuffix: "using UP...")) d = ChopSprite(ct.down, 0.5F);
                         else d = u;
 
-                        if (ValidateSprite(ct.left, errorSuffix: "using UP...")) l = ChopSprite(ct.left);
+                        if (ValidateSprite(ct.left, errorSuffix: "using UP...")) l = ChopSprite(ct.left, 0.5F);
                         else l = u;
 
-                        if (ValidateSprite(ct.right, errorSuffix: "using UP...")) r = ChopSprite(ct.right);
+                        if (ValidateSprite(ct.right, errorSuffix: "using UP...")) r = ChopSprite(ct.right, 0.5F);
                         else r = u;
                     }
 
@@ -282,7 +370,7 @@ public class ScrollingBackground : MonoBehaviour
         }
     }
 
-    private static Sprite[] ChopSprite(Sprite s)
+    private static Sprite[] ChopSprite(Sprite s, float pivot = 0)
     {
         int spriteWidth = (int)s.rect.width;
         int spriteHeight = (int)s.rect.height;
@@ -292,7 +380,7 @@ public class ScrollingBackground : MonoBehaviour
         // Chops up the sprite into smaller sprites for animation
         for (int i = 0; i < sprites.Length; i++)
         {
-            sprites[i] = Sprite.Create(s.texture, new Rect(spriteHeight * i, 0, spriteHeight, spriteHeight), Vector2.zero, s.pixelsPerUnit);
+            sprites[i] = Sprite.Create(s.texture, new Rect(spriteHeight * i, 0, spriteHeight, spriteHeight), Vector2.one * pivot, s.pixelsPerUnit);
             sprites[i].name = s.name + " frame " + i;
         }
 

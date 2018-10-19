@@ -31,5 +31,5 @@ MonoBehaviour:
   right: {fileID: 21300000, guid: e12018c258bcd4d4aa5d91fe71d7030f, type: 3}
   rotationUp: 0
   rotationDown: 180
-  rotationLeft: 270
-  rotationRight: 90
+  rotationLeft: 90
+  rotationRight: 270

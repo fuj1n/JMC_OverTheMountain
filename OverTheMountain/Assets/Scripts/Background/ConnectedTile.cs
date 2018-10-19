@@ -20,7 +20,7 @@ public class ConnectedTile : BasicTile
     [ConditionalHide(HideInInspector = true, ConditionalSourceField = "useRotation")]
     public float rotationDown = 180F;
     [ConditionalHide(HideInInspector = true, ConditionalSourceField = "useRotation")]
-    public float rotationLeft = 270F;
+    public float rotationLeft = 90F;
     [ConditionalHide(HideInInspector = true, ConditionalSourceField = "useRotation")]
-    public float rotationRight = 90F;
+    public float rotationRight = 270F;
 }
