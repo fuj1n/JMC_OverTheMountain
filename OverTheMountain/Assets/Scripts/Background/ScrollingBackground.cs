@@ -149,7 +149,7 @@ public class ScrollingBackground : MonoBehaviour
                 float width = sprite.bounds.size.x;
                 float height = sprite.bounds.size.y;
 
-                spawnable.transform.localPosition = new Vector3(Random.Range(0F, tilesGap.x - width), Random.Range(0F, tilesGap.y - height), -3F);
+                spawnable.transform.localPosition = new Vector3(Random.Range(0F, tilesGap.x - width), Random.Range(0F, tilesGap.y - height), -3F + Random.value);
                 //spawnable.transform.eulerAngles = Vector3.forward * Random.Range(0, 360);
                 spawnable.AddComponent<SpriteRenderer>().sprite = sprite;
             }
