@@ -556,9 +556,9 @@ MonoBehaviour:
   tilesCount: {x: 4, y: 5}
   tilesGap: {x: 10, y: 10}
   scrollSpeed: 5
-  spawnablePasses: 3
-  tokenSwitchChance: 25
+  vegetatePasses: 2
   vegetateChance: 20
+  tokenSwitchChance: 25
 --- !u!4 &1720701002
 Transform:
   m_ObjectHideFlags: 0

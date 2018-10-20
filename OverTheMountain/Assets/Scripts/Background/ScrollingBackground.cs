@@ -31,6 +31,8 @@ public class ScrollingBackground : MonoBehaviour
     public int vegetateChance = 20;
     [Range(0, 100)]
     public int tokenSwitchChance = 50;
+    [Range(1, 7)]
+    public int smallestBiome = 3;
 
     private Transform[][] tiles;
 
@@ -267,7 +269,10 @@ public class ScrollingBackground : MonoBehaviour
 
             upcomingTokens.Enqueue(tokens);
 
-            upcomingTokens.Enqueue(Enumerable.Repeat(currentToken, tilesCount.x).ToArray());
+            for (int i = 0; i < smallestBiome; i++)
+            {
+                upcomingTokens.Enqueue(Enumerable.Repeat(currentToken, tilesCount.x).ToArray());
+            }
         }
         else
         {
