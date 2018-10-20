@@ -25,7 +25,10 @@ public class ScrollingBackground : MonoBehaviour
     public float scrollSpeed = 5F;
 
     [Header("Generation")]
-    public int spawnablePasses = 1;
+    [Range(0, 5)]
+    public int vegetatePasses = 2;
+    [Range(0, 100)]
+    public int vegetateChance = 20;
     [Range(0, 100)]
     public int tokenSwitchChance = 50;
 
@@ -189,9 +192,9 @@ public class ScrollingBackground : MonoBehaviour
         // Vegetation (spawnables)
         if (vegetate && spawnables.ContainsKey(token))
         {
-            for (int pass = 0; pass < spawnablePasses; pass++)
+            for (int pass = 0; pass < vegetatePasses; pass++)
             {
-                if (Random.Range(0, 100) <= 1)
+                if (Random.Range(0, 100) > vegetateChance)
                     continue;
 
                 GameObject spawnable = new GameObject("Spawnable");
