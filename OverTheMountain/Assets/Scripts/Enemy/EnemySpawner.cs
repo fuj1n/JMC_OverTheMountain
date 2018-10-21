@@ -16,6 +16,7 @@ public sealed class EnemySpawner : MonoBehaviour
     public void TilesSpawned(EventTilesSpawned e)
     {
         Debug.LogFormat("Event received {0}", e.position);
+        EventBus.UnRegister(this);
     }
 
     private static EnemyPattern GetRandom()

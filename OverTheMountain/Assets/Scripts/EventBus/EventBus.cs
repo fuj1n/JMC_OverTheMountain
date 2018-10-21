@@ -38,6 +38,12 @@ public static class EventBus
         }
     }
 
+    public static void UnRegister(MonoBehaviour o)
+    {
+        // Filter out all instances of o
+        subscribers = subscribers.Where(s => s.instance != o).ToList();
+    }
+
     public static void Post(IEventBase e)
     {
         Type eventType = e.GetType();
