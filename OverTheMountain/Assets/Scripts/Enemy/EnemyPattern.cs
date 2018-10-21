@@ -13,7 +13,8 @@ public class EnemyPattern : ScriptableObject
         public GameObject enemyType;
 
         [Space]
-        public Vector2 start;
+        [Tooltip("The offset from the center that this starts at where -1 is far left and 1 is far right")]
+        public Vector2 startOffset;
         public Movement[] movements;
 
         [System.Serializable]

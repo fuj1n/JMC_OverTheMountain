@@ -7,6 +7,17 @@ public sealed class EnemySpawner : MonoBehaviour
     private static EnemyPattern[] patterns;
     private static int weightSum;
 
+    private void Awake()
+    {
+        EventBus.Register(this);
+    }
+
+    [SubscribeEvent]
+    public void TilesSpawned(EventTilesSpawned e)
+    {
+        Debug.LogFormat("Event received {0}", e.position);
+    }
+
     private static EnemyPattern GetRandom()
     {
         if (weightSum == 0)

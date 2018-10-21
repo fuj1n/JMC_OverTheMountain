@@ -103,6 +103,8 @@ public class ScrollingBackground : MonoBehaviour
     {
         scrollValue += scrollSpeed * Time.deltaTime;
 
+        bool postEvent = false;
+
         if (scrollValue >= Mathf.FloorToInt(tilesCount.y / 2F) * tilesGap.y)
         {
             scrollValue -= tilesGap.y;
@@ -128,6 +130,8 @@ public class ScrollingBackground : MonoBehaviour
 
                 ConfigureTile(x, tilesCount.y - 1, currentTokens[x]);
             }
+
+            postEvent = true;
         }
 
         anchor.localPosition += Vector3.down * scrollSpeed * Time.deltaTime;
@@ -140,6 +144,9 @@ public class ScrollingBackground : MonoBehaviour
             foreach (Transform t in anchor)
                 t.localPosition += Vector3.up * HARD_RESET;
         }
+
+        if (postEvent)
+            EventBus.Post(new EventTilesSpawned(tiles[0][tilesCount.y - 1].position));
     }
 
     private void ConfigureTile(int x, int y, string token, bool vegetate = true)
