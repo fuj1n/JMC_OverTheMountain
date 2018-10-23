@@ -18,6 +18,8 @@ public sealed class EnemySpawner : MonoBehaviour
 
     private int currentSpawnCount = 0;
 
+    private Bounds worldBounds;
+
     private void Awake()
     {
         anchor = new GameObject("Enemies Anchor").transform;
@@ -47,7 +49,7 @@ public sealed class EnemySpawner : MonoBehaviour
                     ai = go.AddComponent<EnemyAI>();
 
                 ai.scrollSpeed = e.scrollSpeed;
-                ai.worldBounds = e.totalBounds;
+                ai.worldBounds = worldBounds;
                 ai.movements = enemy.movements;
 
                 // Scale position so that (-1, -1) is the bottom-left of the leftmost tile and (1, 1) is the top-right of the rightmost tile
@@ -55,6 +57,12 @@ public sealed class EnemySpawner : MonoBehaviour
                 go.transform.localPosition = (Vector2)e.spawnBounds.center + e.spawnBounds.extents * enemy.startOffset;
             }
         }
+    }
+
+    [SubscribeEvent]
+    public void SetWorldBounds(EventSetWorldBounds e)
+    {
+        worldBounds = e.worldBounds;
     }
 
     private static EnemyPattern GetRandom()

@@ -42,7 +42,7 @@ public class ScrollingBackground : MonoBehaviour
 
     private float scrollValue = 0F;
 
-    private Bounds tileBounds;
+    private Bounds worldBounds;
 
     private Queue<string[]> upcomingTokens = new Queue<string[]>();
 
@@ -56,7 +56,7 @@ public class ScrollingBackground : MonoBehaviour
             float top = transform.position.y + Mathf.FloorToInt(tilesCount.y / 2F + (tilesCount.y % 2F == 0 ? 1 : 2)) * tilesGap.y;
             float bottom = top - (tilesCount.y + 1) * tilesGap.y;
 
-            tileBounds = new Bounds
+            worldBounds = new Bounds
             {
                 center = new Vector2(transform.position.x + tilesGap.x * tilesCount.x / 2F, (top + bottom) / 2F),
                 size = new Vector3(tilesCount.x * tilesGap.x, tilesGap.y * (tilesCount.y + 1))
@@ -113,6 +113,11 @@ public class ScrollingBackground : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        EventBus.Post(new EventSetWorldBounds(worldBounds));
+    }
+
     private void Update()
     {
         scrollValue += scrollSpeed * Time.deltaTime;
@@ -164,11 +169,11 @@ public class ScrollingBackground : MonoBehaviour
         {
             Bounds bounds = new Bounds
             {
-                center = new Vector2(tileBounds.center.x, transform.position.y + (tilesCount.y / 2F + 1) * tilesGap.y),
-                size = new Vector3(tileBounds.size.x, tilesGap.y)
+                center = new Vector2(worldBounds.center.x, transform.position.y + (tilesCount.y / 2F + 1) * tilesGap.y),
+                size = new Vector3(worldBounds.size.x, tilesGap.y)
             };
 
-            EventBus.Post(new EventTilesSpawned(bounds, tileBounds, scrollSpeed));
+            EventBus.Post(new EventTilesSpawned(bounds, scrollSpeed));
         }
     }
 
@@ -465,9 +470,9 @@ public class ScrollingBackground : MonoBehaviour
     {
         // Draw the whole boundary in translucent green
         Gizmos.color = new Color(0F, 1F, 0F, 0.5F);
-        Gizmos.DrawCube(tileBounds.center, tileBounds.size);
+        Gizmos.DrawCube(worldBounds.center, worldBounds.size);
         // Draw the center in red
         Gizmos.color = Color.red;
-        Gizmos.DrawCube(tileBounds.center, Vector3.up * .5F + Vector3.right * tileBounds.size.x);
+        Gizmos.DrawCube(worldBounds.center, Vector3.up * .5F + Vector3.right * worldBounds.size.x);
     }
 }

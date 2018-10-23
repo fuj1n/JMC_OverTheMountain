@@ -50,7 +50,7 @@ public class EnemyAI : MonoBehaviour
             nextShot = shootFrequency;
 
             float angle = currentOffset;
-            if (fireTowardsPlayer)
+            if (fireTowardsPlayer) // Derive angle between the enemy and the player
                 angle += Mathf.Atan2(Player.instance.transform.position.y - transform.position.y, Player.instance.transform.position.x - transform.position.x) * Mathf.Rad2Deg;
             currentOffset += angleOffset;
 

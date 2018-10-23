@@ -20,14 +20,15 @@ public class Bullet : MonoBehaviour
             Destroy(gameObject);
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         string tag = hitTarget == Target.PLAYER ? "Player" : "Enemy";
 
         if (!other.CompareTag(tag))
             return;
 
-        //TODO deal damage
+        // TODO more elegant way to do this
+        Destroy(other.gameObject);
 
         Destroy(gameObject);
     }
