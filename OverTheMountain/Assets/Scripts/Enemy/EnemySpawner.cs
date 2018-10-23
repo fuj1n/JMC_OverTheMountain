@@ -47,7 +47,7 @@ public sealed class EnemySpawner : MonoBehaviour
                     ai = go.AddComponent<EnemyAI>();
 
                 ai.scrollSpeed = e.scrollSpeed;
-                ai.tileBounds = e.totalBounds;
+                ai.worldBounds = e.totalBounds;
                 ai.movements = enemy.movements;
 
                 // Scale position so that (-1, -1) is the bottom-left of the leftmost tile and (1, 1) is the top-right of the rightmost tile

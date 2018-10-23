@@ -1,15 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class Player : MonoBehaviour {
+public class Player : MonoBehaviour
+{
+    public static Player instance;
+
     public float speed = 10F;
 
     private Rigidbody2D r2d;
 
     private void Awake()
     {
+        if (instance)
+            Destroy(instance);
+
+        instance = this;
+
         r2d = GetComponent<Rigidbody2D>();
     }
 
