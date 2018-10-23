@@ -5,10 +5,12 @@ public struct EventTilesSpawned : IEventBase
     public float scrollSpeed;
 
     public Bounds spawnBounds;
+    public Bounds totalBounds;
 
-    public EventTilesSpawned(Bounds bounds, float scrollSpeed)
+    public EventTilesSpawned(Bounds spawnBounds, Bounds totalBounds, float scrollSpeed)
     {
-        spawnBounds = bounds;
+        this.spawnBounds = spawnBounds;
+        this.totalBounds = totalBounds;
         this.scrollSpeed = scrollSpeed;
     }
 }

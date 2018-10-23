@@ -51,8 +51,17 @@ public class ScrollingBackground : MonoBehaviour
 
     private void Awake()
     {
-        tileBounds = new Bounds();
-        //tileBounds.center = 
+        {
+            // Weird boundary math cause I am bad at math xP
+            float top = transform.position.y + Mathf.FloorToInt(tilesCount.y / 2F + (tilesCount.y % 2F == 0 ? 1 : 2)) * tilesGap.y;
+            float bottom = top - (tilesCount.y + 1) * tilesGap.y;
+
+            tileBounds = new Bounds
+            {
+                center = new Vector2(transform.position.x + tilesGap.x * tilesCount.x / 2F, (top + bottom) / 2F),
+                size = new Vector3(tilesCount.x * tilesGap.x, tilesGap.y * (tilesCount.y + 1))
+            };
+        }
 
         currentToken = tokens.Contains(STARTING_TOKEN) ? STARTING_TOKEN : RandomToken();
         currentTokens = Enumerable.Repeat(currentToken, tilesCount.x).ToArray();
@@ -155,11 +164,11 @@ public class ScrollingBackground : MonoBehaviour
         {
             Bounds bounds = new Bounds
             {
-                center = new Vector2(Mathf.FloorToInt(transform.position.x + tilesGap.x * tilesCount.x / 2F), transform.position.y + (tilesCount.y / 2F + 1) * tilesGap.y),
-                size = new Vector3(tilesCount.x * tilesGap.x, tilesGap.y)
+                center = new Vector2(tileBounds.center.x, transform.position.y + (tilesCount.y / 2F + 1) * tilesGap.y),
+                size = new Vector3(tileBounds.size.x, tilesGap.y)
             };
 
-            EventBus.Post(new EventTilesSpawned(bounds, scrollSpeed));
+            EventBus.Post(new EventTilesSpawned(bounds, tileBounds, scrollSpeed));
         }
     }
 
@@ -449,5 +458,16 @@ public class ScrollingBackground : MonoBehaviour
         }
 
         return true;
+    }
+
+    // Debug bounds
+    private void OnDrawGizmosSelected()
+    {
+        // Draw the whole boundary in translucent green
+        Gizmos.color = new Color(0F, 1F, 0F, 0.5F);
+        Gizmos.DrawCube(tileBounds.center, tileBounds.size);
+        // Draw the center in red
+        Gizmos.color = Color.red;
+        Gizmos.DrawCube(tileBounds.center, Vector3.up * .5F + Vector3.right * tileBounds.size.x);
     }
 }

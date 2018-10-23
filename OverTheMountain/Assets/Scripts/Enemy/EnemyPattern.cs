@@ -20,7 +20,7 @@ public class EnemyPattern : ScriptableObject
         [System.Serializable]
         public struct Movement
         {
-            public Vector2 pos;
+            public Vector2 move;
             public float await;
         }
     }

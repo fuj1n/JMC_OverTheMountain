@@ -13,15 +13,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   patternWeight: 1
   enemies:
-  - enemyType: {fileID: 1819782512366326, guid: b66d83ad580c7494197811c48b48ae52,
+  - enemyType: {fileID: 1819782512366326, guid: 28ebe76d4f80654459603b1bb2cee74e,
       type: 2}
-    startOffset: {x: -5, y: -2}
+    startOffset: {x: -0.5, y: -0.5}
     movements: []
-  - enemyType: {fileID: 1819782512366326, guid: b66d83ad580c7494197811c48b48ae52,
+  - enemyType: {fileID: 1819782512366326, guid: 28ebe76d4f80654459603b1bb2cee74e,
       type: 2}
     startOffset: {x: 0, y: 0}
-    movements: []
-  - enemyType: {fileID: 1819782512366326, guid: b66d83ad580c7494197811c48b48ae52,
+    movements:
+    - move: {x: 5, y: 3}
+      await: 0
+  - enemyType: {fileID: 1819782512366326, guid: 28ebe76d4f80654459603b1bb2cee74e,
       type: 2}
-    startOffset: {x: 5, y: 2}
+    startOffset: {x: 0.5, y: 0.5}
     movements: []
