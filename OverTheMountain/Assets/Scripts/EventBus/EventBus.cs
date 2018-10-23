@@ -59,7 +59,8 @@ public static class EventBus
             }
             catch (TargetInvocationException ex) // Occurs when an error is thrown from within the executed function
             {
-                Debug.LogError(ex.InnerException != null ? ex.InnerException : ex);
+                // Coalesce expression val1 ?? val2 uses first value, unless it is null, where it uses the second value
+                Debug.LogError(ex.InnerException ?? ex);
             }
             catch (Exception ex)
             {

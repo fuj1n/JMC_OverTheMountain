@@ -48,7 +48,9 @@ public sealed class EnemySpawner : MonoBehaviour
 
                 ai.scrollSpeed = e.scrollSpeed;
 
-                go.transform.localPosition = e.position + enemy.startOffset;
+                // Scale position so that (-1, -1) is the bottom-left of the leftmost tile and (1, 1) is the top-right of the rightmost tile
+                // Yeah the maths ^_^
+                go.transform.localPosition = (Vector2)e.spawnBounds.center + e.spawnBounds.extents * enemy.startOffset;
             }
         }
     }

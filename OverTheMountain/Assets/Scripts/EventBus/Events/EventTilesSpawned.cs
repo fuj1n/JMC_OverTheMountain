@@ -2,12 +2,13 @@
 
 public struct EventTilesSpawned : IEventBase
 {
-    public Vector2 position;
     public float scrollSpeed;
 
-    public EventTilesSpawned(Vector2 position, float scrollSpeed)
+    public Bounds spawnBounds;
+
+    public EventTilesSpawned(Bounds bounds, float scrollSpeed)
     {
-        this.position = position;
+        spawnBounds = bounds;
         this.scrollSpeed = scrollSpeed;
     }
 }

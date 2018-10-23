@@ -36,11 +36,13 @@ public class ScrollingBackground : MonoBehaviour
 
     private Transform[][] tiles;
 
-    private Dictionary<Transform, SpriteAnimator> animCache = new Dictionary<Transform, SpriteAnimator>();
-    private Dictionary<SpriteAnimator, string> tokensCache = new Dictionary<SpriteAnimator, string>();
+    private readonly Dictionary<Transform, SpriteAnimator> animCache = new Dictionary<Transform, SpriteAnimator>();
+    private readonly Dictionary<SpriteAnimator, string> tokensCache = new Dictionary<SpriteAnimator, string>();
     private Transform anchor;
 
     private float scrollValue = 0F;
+
+    private Bounds tileBounds;
 
     private Queue<string[]> upcomingTokens = new Queue<string[]>();
 
@@ -49,6 +51,9 @@ public class ScrollingBackground : MonoBehaviour
 
     private void Awake()
     {
+        tileBounds = new Bounds();
+        //tileBounds.center = 
+
         currentToken = tokens.Contains(STARTING_TOKEN) ? STARTING_TOKEN : RandomToken();
         currentTokens = Enumerable.Repeat(currentToken, tilesCount.x).ToArray();
         AddQueue(false);
@@ -148,9 +153,13 @@ public class ScrollingBackground : MonoBehaviour
         // Post event after everything so that the reset doesn't mess with things
         if (postEvent)
         {
-            Vector2 vec = new Vector2(Mathf.FloorToInt(transform.position.x + tilesGap.x * tilesCount.x / 2F), transform.position.y + (tilesCount.y / 2F + 1) * tilesGap.y);
+            Bounds bounds = new Bounds
+            {
+                center = new Vector2(Mathf.FloorToInt(transform.position.x + tilesGap.x * tilesCount.x / 2F), transform.position.y + (tilesCount.y / 2F + 1) * tilesGap.y),
+                size = new Vector3(tilesCount.x * tilesGap.x, tilesGap.y)
+            };
 
-            EventBus.Post(new EventTilesSpawned(vec, scrollSpeed));
+            EventBus.Post(new EventTilesSpawned(bounds, scrollSpeed));
         }
     }
 
