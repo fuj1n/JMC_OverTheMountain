@@ -57,9 +57,13 @@ public static class EventBus
             {
                 sub.function.Invoke(sub.instance, new object[] { e });
             }
+            catch (TargetInvocationException ex) // Occurs when an error is thrown from within the executed function
+            {
+                Debug.LogError(ex.InnerException != null ? ex.InnerException : ex);
+            }
             catch (Exception ex)
             {
-                Debug.LogError(ex.StackTrace);
+                Debug.LogError("Cannot invoke event handler because: \n" + ex);
             }
         }
     }

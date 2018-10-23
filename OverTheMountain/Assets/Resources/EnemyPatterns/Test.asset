@@ -12,4 +12,16 @@ MonoBehaviour:
   m_Name: Test
   m_EditorClassIdentifier: 
   patternWeight: 1
-  enemies: []
+  enemies:
+  - enemyType: {fileID: 1819782512366326, guid: b66d83ad580c7494197811c48b48ae52,
+      type: 2}
+    startOffset: {x: -5, y: -2}
+    movements: []
+  - enemyType: {fileID: 1819782512366326, guid: b66d83ad580c7494197811c48b48ae52,
+      type: 2}
+    startOffset: {x: 0, y: 0}
+    movements: []
+  - enemyType: {fileID: 1819782512366326, guid: b66d83ad580c7494197811c48b48ae52,
+      type: 2}
+    startOffset: {x: 5, y: 2}
+    movements: []

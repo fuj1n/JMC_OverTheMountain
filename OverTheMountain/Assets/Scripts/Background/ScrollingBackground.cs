@@ -145,8 +145,13 @@ public class ScrollingBackground : MonoBehaviour
                 t.localPosition += Vector3.up * HARD_RESET;
         }
 
+        // Post event after everything so that the reset doesn't mess with things
         if (postEvent)
-            EventBus.Post(new EventTilesSpawned(tiles[0][tilesCount.y - 1].position));
+        {
+            Vector2 vec = new Vector2(Mathf.FloorToInt(transform.position.x + tilesGap.x * tilesCount.x / 2F), transform.position.y + (tilesCount.y / 2F + 1) * tilesGap.y);
+
+            EventBus.Post(new EventTilesSpawned(vec, scrollSpeed));
+        }
     }
 
     private void ConfigureTile(int x, int y, string token, bool vegetate = true)
@@ -170,12 +175,6 @@ public class ScrollingBackground : MonoBehaviour
         // Select random variation
         var variations = sprites.Select(s => s.Key).Where(s => s.Equals(token) || s.StartsWith(token + "#"));
         ConfigureAnimator(san, token, variations.ElementAt(Random.Range(0, variations.Count())));
-
-        //san.Sprites = sprites[variations.ElementAt(Random.Range(0, variations.Count()))];
-        //if (frameRates.ContainsKey(token))
-        //    san.fps = frameRates[token];
-        //if (rotations.ContainsKey(token))
-        //    tile.eulerAngles = Vector3.forward * rotations[token];
 
         // Connected textures
         // Up
@@ -215,7 +214,7 @@ public class ScrollingBackground : MonoBehaviour
                 float height = sprite.bounds.size.y;
 
                 spawnable.transform.localPosition = new Vector3(Random.Range(0F, tilesGap.x - width), Random.Range(0F, tilesGap.y - height), -3F + Random.value);
-                // Disabled cause it doesn't make sense with the sprites I am using
+                // Disabled cause it doesn't make sense with the sprites I am using, upside down tree anyone?
                 //spawnable.transform.eulerAngles = Vector3.forward * Random.Range(0, 360);
                 spawnable.AddComponent<SpriteRenderer>().sprite = sprite;
             }
@@ -257,11 +256,13 @@ public class ScrollingBackground : MonoBehaviour
         return tokens.ElementAt(Random.Range(0, tokens.Count));
     }
 
+    // World generator
     private void AddQueue(bool rng = true)
     {
         if (currentTokens == null)
             currentTokens = Enumerable.Repeat(currentToken, tilesCount.x).ToArray();
 
+        // Avoid leaking by having the queue grow larger over time
         if (upcomingTokens.Count > 2)
             return;
 
