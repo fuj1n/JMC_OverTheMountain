@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Enemy Pattern", menuName = AssetGlobals.CREATE_MENU_ROOT + "Enemy Pattern")]
 public class EnemyPattern : ScriptableObject
@@ -7,7 +8,9 @@ public class EnemyPattern : ScriptableObject
     public int patternWeight = 1;
     public Enemy[] enemies;
 
-    [System.Serializable]
+    public PreviewRender preview;
+
+    [Serializable]
     public struct Enemy
     {
         public GameObject enemyType;
@@ -17,11 +20,15 @@ public class EnemyPattern : ScriptableObject
         public Vector2 startOffset;
         public Movement[] movements;
 
-        [System.Serializable]
+        [Serializable]
         public struct Movement
         {
             public Vector2 move;
             public float await;
         }
     }
+
+    [Serializable]
+    public struct PreviewRender
+    { }
 }

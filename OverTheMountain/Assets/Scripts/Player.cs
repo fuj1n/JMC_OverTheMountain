@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class Player : MonoBehaviour
@@ -61,7 +60,7 @@ public class Player : MonoBehaviour
 
     private void OnDestroy()
     {
-        SceneManager.LoadScene(0);
+        //SceneManager.LoadScene(0);
     }
 
     [SubscribeEvent]
