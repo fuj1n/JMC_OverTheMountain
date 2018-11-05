@@ -22,21 +22,9 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        string tag = hitTarget == Target.PLAYER ? "Player" : "Enemy";
-
-        if (!other.CompareTag(tag))
-            return;
-
         IDamageReceiver receiver = other.GetComponent<IDamageReceiver>();
         if (receiver != null)
-            receiver.OnDamage();
-
-        Destroy(gameObject);
-    }
-
-    public enum Target
-    {
-        PLAYER,
-        ENEMY
+            if (receiver.OnDamage(hitTarget))
+                Destroy(gameObject);
     }
 }

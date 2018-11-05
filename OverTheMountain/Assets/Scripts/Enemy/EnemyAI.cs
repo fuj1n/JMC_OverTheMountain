@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using static EnemyPattern.Enemy;
 
-public class EnemyAI : MonoBehaviour
+public class EnemyAI : MonoBehaviour, IDamageReceiver
 {
     [HideInInspector]
     public float scrollSpeed;
@@ -76,7 +76,7 @@ public class EnemyAI : MonoBehaviour
                 b.direction = new Vector3(Mathf.Cos(currentAngle), Mathf.Sin(currentAngle), 0F);
                 b.speed = bulletSpeed;
                 b.worldBounds = worldBounds;
-                b.hitTarget = Bullet.Target.PLAYER;
+                b.hitTarget = Target.PLAYER;
             }
         }
 
@@ -125,5 +125,14 @@ public class EnemyAI : MonoBehaviour
 
             Gizmos.DrawWireSphere(transform.position + new Vector3(radius * Mathf.Cos(currentAngle), radius * Mathf.Sin(currentAngle)), 0.2F);
         }
+    }
+
+    public bool OnDamage(Target target)
+    {
+        if (target != Target.ENEMY)
+            return false;
+
+        Destroy(gameObject);
+        return true;
     }
 }

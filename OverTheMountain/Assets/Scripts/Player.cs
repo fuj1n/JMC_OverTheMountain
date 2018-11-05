@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IDamageReceiver
 {
     public static Player instance;
 
@@ -46,7 +47,7 @@ public class Player : MonoBehaviour
             b.direction = Vector3.up;
             b.speed = bulletSpeed;
             b.worldBounds = worldBounds;
-            b.hitTarget = Bullet.Target.ENEMY;
+            b.hitTarget = Target.ENEMY;
         }
     }
 
@@ -58,9 +59,13 @@ public class Player : MonoBehaviour
         r2d.velocity = new Vector2(right * speed, up * speed);
     }
 
-    private void OnDestroy()
+    public bool OnDamage(Target target)
     {
-        //SceneManager.LoadScene(0);
+        if (target != Target.PLAYER)
+            return false;
+
+        SceneManager.LoadScene(0);
+        return true;
     }
 
     [SubscribeEvent]
