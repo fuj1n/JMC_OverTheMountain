@@ -103,6 +103,8 @@ MonoBehaviour:
   bullet: {fileID: 1819782512366326, guid: 6d851e5f7962ac04790da7d9ff704f3f, type: 2}
   fireSpeed: 0.5
   bulletSpeed: 10
+  dashSpeed: 20
+  dashTime: 1
 --- !u!212 &212959392832579182
 SpriteRenderer:
   m_ObjectHideFlags: 1

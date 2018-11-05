@@ -13,11 +13,18 @@ public class Player : MonoBehaviour, IDamageReceiver
     public float fireSpeed = .5F;
     public float bulletSpeed = 10F;
 
+    [Header("Dash")]
+    public float dashSpeed = 25F;
+    public float dashTime = 5F;
+
     private float fireCooldown;
 
     private Rigidbody2D r2d;
 
     private Bounds worldBounds;
+
+    private float dashTimer;
+    private Vector2 dashDirection;
 
     private void Awake()
     {
@@ -53,15 +60,39 @@ public class Player : MonoBehaviour, IDamageReceiver
 
     private void LateUpdate()
     {
+        if (dashTimer > 0F)
+        {
+            dashTimer -= Time.deltaTime;
+
+            r2d.velocity = dashDirection * dashSpeed;
+
+            return;
+        }
+
+
         float up = Input.GetAxis("Vertical");
         float right = Input.GetAxis("Horizontal");
 
-        r2d.velocity = new Vector2(right * speed, up * speed);
+        if (Input.GetButtonDown("Dash") && right != 0F)
+        {
+            dashTimer = dashTime;
+            dashDirection = right > 0F ? Vector2.right : Vector2.left;
+            return;
+        }
+
+        r2d.velocity = new Vector2(right, up) * speed;
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        Debug.Log("Test " + collision.collider.tag);
+        if (collision.collider.CompareTag("Bound"))
+            dashTimer = 0F;
     }
 
     public bool OnDamage(Target target)
     {
-        if (target != Target.PLAYER)
+        if (dashTimer > 0F || target != Target.PLAYER)
             return false;
 
         SceneManager.LoadScene(0);

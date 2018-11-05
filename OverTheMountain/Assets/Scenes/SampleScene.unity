@@ -152,6 +152,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114406628372955332, guid: b66d83ad580c7494197811c48b48ae52,
+        type: 2}
+      propertyPath: dashSpeed
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b66d83ad580c7494197811c48b48ae52, type: 2}
   m_IsPrefabAsset: 0
@@ -570,7 +575,7 @@ GameObject:
   - component: {fileID: 2107296494}
   m_Layer: 0
   m_Name: GameBoundary
-  m_TagString: Untagged
+  m_TagString: Bound
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -629,7 +634,7 @@ EdgeCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_EdgeRadius: 0
+  m_EdgeRadius: 0.25
   m_Points:
   - {x: -20, y: 15}
   - {x: -20, y: -7}
