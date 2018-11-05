@@ -27,8 +27,9 @@ public class Bullet : MonoBehaviour
         if (!other.CompareTag(tag))
             return;
 
-        // TODO more elegant way to do this
-        Destroy(other.gameObject);
+        IDamageReceiver receiver = other.GetComponent<IDamageReceiver>();
+        if (receiver != null)
+            receiver.OnDamage();
 
         Destroy(gameObject);
     }
