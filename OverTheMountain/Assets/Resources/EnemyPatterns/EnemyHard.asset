@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f898e22adf6aaad4bbf1613a297c5ff5, type: 3}
+  m_Name: EnemyHard
+  m_EditorClassIdentifier: 
+  patternWeight: 1
+  enemies:
+  - enemyType: {fileID: 1819782512366326, guid: 28ebe76d4f80654459603b1bb2cee74e,
+      type: 2}
+    startOffset: {x: -0.75, y: 0.8}
+    movements:
+    - move: {x: 10, y: -5}
+      await: 2
+  - enemyType: {fileID: 1819782512366326, guid: 28ebe76d4f80654459603b1bb2cee74e,
+      type: 2}
+    startOffset: {x: 0.75, y: 0.8}
+    movements:
+    - move: {x: -10, y: -5}
+      await: 2

@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f898e22adf6aaad4bbf1613a297c5ff5, type: 3}
   m_Name: SideBasicEnemies
   m_EditorClassIdentifier: 
-  patternWeight: 1
+  patternWeight: 10
   enemies:
   - enemyType: {fileID: 1819782512366326, guid: 7150c2a6bafab6049ab8e54dd009f11d,
       type: 2}
