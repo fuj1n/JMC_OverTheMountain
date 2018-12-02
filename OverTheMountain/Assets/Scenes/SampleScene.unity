@@ -152,11 +152,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 114406628372955332, guid: b66d83ad580c7494197811c48b48ae52,
-        type: 2}
-      propertyPath: dashSpeed
-      value: 20
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b66d83ad580c7494197811c48b48ae52, type: 2}
   m_IsPrefabAsset: 0

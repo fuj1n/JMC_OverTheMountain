@@ -69,7 +69,6 @@ public class Player : MonoBehaviour, IDamageReceiver
             return;
         }
 
-
         float up = Input.GetAxis("Vertical");
         float right = Input.GetAxis("Horizontal");
 

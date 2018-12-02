@@ -92,6 +92,9 @@ public class EnemyAI : MonoBehaviour, IDamageReceiver
             if (currentMove < movements.Length)
             {
                 moveQuota = movements[currentMove].move;
+                moveQuota.x = Mathf.Abs(moveQuota.x);
+                moveQuota.y = Mathf.Abs(moveQuota.y);
+
                 moveDirection = new Vector2(movements[currentMove].move.x > 0 ? 1 : -1, movements[currentMove].move.y > 0 ? 1 : -1);
                 nextMoveCooldown = movements[currentMove].await;
             }
